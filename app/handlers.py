@@ -3,7 +3,9 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.filters import CommandStart, Command
 
 import app.keyboards as kb
-from app.database.requests import get_item_by_id
+from app.database.requests import get_item_by_id, set_user
+
+
 router = Router()
 
 
@@ -13,6 +15,7 @@ router = Router()
 
 async def cmd_start(message: Message | CallbackQuery):
     if isinstance(message, Message):
+        await set_user(message.from_user.id)
         await message.answer('Добро пожаловать в интернет магазин',
                              reply_markup=kb.main)
     else:

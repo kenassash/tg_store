@@ -4,6 +4,20 @@ from app.database.models import async_session
 from sqlalchemy import select, update, delete
 
 
+async def set_user(tg_id):
+    async with async_session() as sesssion:
+        user = await sesssion.scalar(select(User).where(User.tg_id == tg_id))
+
+        if not user:
+            sesssion.add(User(tg_id=tg_id))
+            await sesssion.commit()
+
+async def get_users():
+    async with async_session() as sesssion:
+        users = await sesssion.scalars(select(User))
+        return users
+
+
 async  def get_categories():
     async with async_session() as sesssion:
         categories = await sesssion.scalars(select(Category))
